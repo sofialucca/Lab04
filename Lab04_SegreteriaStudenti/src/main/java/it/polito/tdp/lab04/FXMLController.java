@@ -6,6 +6,11 @@ package it.polito.tdp.lab04;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.lab04.model.Corso;
+import it.polito.tdp.lab04.model.Model;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +21,8 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 
+	Model model=new Model();
+	
     @FXML
     private ResourceBundle resources;
 
@@ -23,7 +30,7 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ComboBox<?> choiceCorsi;
+    private ComboBox<String> choiceCorsi;
 
     @FXML
     private Button bttnIscrittiCorso;
@@ -89,6 +96,13 @@ public class FXMLController {
         assert bttnIscrizione != null : "fx:id=\"bttnIscrizione\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtRislutato != null : "fx:id=\"txtRislutato\" was not injected: check your FXML file 'Scene.fxml'.";
         assert bttnReset != null : "fx:id=\"bttnReset\" was not injected: check your FXML file 'Scene.fxml'.";
-
+        ObservableList<String> corsi =FXCollections.observableArrayList(model.getTuttiICorsi());
+        
+        this.choiceCorsi.setItems(corsi);
+        this.choiceCorsi.getItems().add(0,"--Nessun corso--");
+    }
+    
+    public void setModel(Model model) {
+    	this.model=model;
     }
 }
