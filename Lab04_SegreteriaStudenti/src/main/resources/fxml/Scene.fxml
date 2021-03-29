@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
@@ -47,31 +46,36 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="txtMatricola" text="Matricola">
+                  <TextField fx:id="txtMatricola" promptText="Matricola">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </TextField>
-                  <CheckBox fx:id="boxStudente" mnemonicParsing="false" onAction="#getNomeCognome" textFill="#15ff00">
+                  <Button fx:id="bttnStudente" mnemonicParsing="false" onAction="#getNomeCognome" prefHeight="25.0" prefWidth="26.0">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
-                  </CheckBox>
-                  <TextField fx:id="txtNome" editable="false" text="Nome">
+                  </Button>
+                  <TextField fx:id="txtNome" editable="false" promptText="Nome">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </TextField>
-                  <TextField fx:id="txtCognome" editable="false" text="Cognome">
+                  <TextField fx:id="txtCognome" editable="false" promptText="Cognome">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </TextField>
                </children>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="5.0" />
                </VBox.margin>
             </HBox>
+            <Label fx:id="labelErrore" textFill="RED">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </Label>
             <HBox alignment="CENTER_LEFT">
                <children>
                   <Button fx:id="bttnCercaCorsi" mnemonicParsing="false" onAction="#doCercaCorsi" text="Cerca corsi" />
@@ -90,7 +94,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </TextArea>
-            <Button fx:id="bttnReset" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#soReset" text="Reset">
+            <Button fx:id="bttnReset" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#doReset" text="Reset">
                <VBox.margin>
                   <Insets left="534.0" />
                </VBox.margin>
