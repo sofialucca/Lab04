@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
 import it.polito.tdp.lab04.model.Studente;
 import javafx.collections.FXCollections;
@@ -15,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -69,12 +69,41 @@ public class FXMLController {
 
     @FXML
     void doCercaCorsi(ActionEvent event) {
-
+    	
+    	this.choiceCorsi.setValue(null);
+    	txtRisultato.clear();
+    	if(txtMatricola.getText().isBlank()) {
+    		this.labelErrore.setText("ERRORE: iserire matricola");
+    		return;
+    	}
+    	if(!this.isValid(txtMatricola.getText())) {
+    		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
+    		return;
+    	}
+    	int matricola=Integer.parseInt(txtMatricola.getText());
+    	if(model.getStudente(matricola)==null) {
+    		this.labelErrore.setText("ERRORE:studente non presente nel database");
+    		return;
+    	}
+    	List<Corso> listaCorsi=model.getCorsiStudente(matricola);
+    	this.labelErrore.setText(null);
+    	if(listaCorsi.isEmpty()) {
+    		this.txtRisultato.setText("Studente iscritto a 0 corsi");
+    		return;
+    	}
+    	
+    	for(Corso c:listaCorsi) {
+    		this.txtRisultato.appendText(c.toString()+"\n");
+    	}
     }
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
-    	this.txtRisultato.clear();;
+    	this.txtMatricola.clear();
+    	this.txtCognome.clear();
+    	this.txtNome.clear();
+    	this.txtRisultato.clear();
+    	
     	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().equals("--Nessun corso--")) {
     		this.labelErroriCorsi.setText("ERRORE: nessun corso selezionato");
     		return;
@@ -83,7 +112,7 @@ public class FXMLController {
     	List<Studente> studentiCorso=model.getStudentiIscrittiAlCorso(choiceCorsi.getValue());
     	this.labelErroriCorsi.setText(null);
     	if(studentiCorso.isEmpty()) {
-    		txtRisultato.setText("Nessuno studente iscritto al corso");
+    		txtRisultato.setText("ERRORE:studente non presente nel database");
     		return;
     	}
     	for(Studente s:studentiCorso) {
@@ -101,9 +130,12 @@ public class FXMLController {
     @FXML
     void getNomeCognome(ActionEvent event) {
 
+    	
     	if(txtMatricola.getText().isBlank()) {
     		return;
     	}
+    	this.choiceCorsi.setValue(null);
+    	
     	if(!this.isValid(txtMatricola.getText())) {
     		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
     		return;
@@ -121,7 +153,13 @@ public class FXMLController {
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	this.choiceCorsi.setValue(null);
+    	this.txtMatricola.clear();
+    	this.txtRisultato.clear();
+    	this.labelErrore.setText(null);
+    	this.labelErroriCorsi.setText(null);
+    	this.txtCognome.clear();
+    	this.txtNome.clear();
     }
 
     @FXML

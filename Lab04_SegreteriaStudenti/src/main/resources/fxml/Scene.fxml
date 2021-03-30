@@ -106,7 +106,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </TextArea>
-            <Button fx:id="bttnReset" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#doReset" text="Reset">
+            <Button fx:id="bttnReset" alignment="CENTER" mnemonicParsing="false" onAction="#doReset" text="Reset">
                <VBox.margin>
                   <Insets left="534.0" />
                </VBox.margin>

@@ -32,4 +32,9 @@ public class Model {
 		String codins=corso.substring(0,7);
 		return corsoDao.getStudentiIscrittiAlCorso(codins);
 	}
+	
+	public List<Corso> getCorsiStudente(int matricola){
+		
+		return studenteDao.getCorsiStudente(matricola);
+	}
 }

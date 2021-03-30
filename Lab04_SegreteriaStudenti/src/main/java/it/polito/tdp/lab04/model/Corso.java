@@ -70,6 +70,11 @@ public class Corso {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return ( codins + "		" + crediti + "		" + nome + "		" + pd );
+	}
 	
 	
 }
