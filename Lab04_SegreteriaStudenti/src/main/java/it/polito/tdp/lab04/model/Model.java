@@ -37,4 +37,9 @@ public class Model {
 		
 		return studenteDao.getCorsiStudente(matricola);
 	}
+	
+	public boolean iscriviStudenteACorso(int matricola,String corso) {
+		String codins=corso.substring(0,7);
+		return corsoDao.inscriviStudenteACorso(matricola, codins);
+	}
 }

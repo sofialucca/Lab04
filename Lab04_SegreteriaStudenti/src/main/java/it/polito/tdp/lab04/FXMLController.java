@@ -66,25 +66,18 @@ public class FXMLController {
     
     @FXML
     private Label labelErroriCorsi;
+    
 
     @FXML
     void doCercaCorsi(ActionEvent event) {
-    	
+    	this.labelErroriCorsi.setText(null);
     	this.choiceCorsi.setValue(null);
     	txtRisultato.clear();
-    	if(txtMatricola.getText().isBlank()) {
-    		this.labelErrore.setText("ERRORE: iserire matricola");
-    		return;
-    	}
     	if(!this.isValid(txtMatricola.getText())) {
-    		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
     		return;
     	}
     	int matricola=Integer.parseInt(txtMatricola.getText());
-    	if(model.getStudente(matricola)==null) {
-    		this.labelErrore.setText("ERRORE:studente non presente nel database");
-    		return;
-    	}
+
     	List<Corso> listaCorsi=model.getCorsiStudente(matricola);
     	this.labelErrore.setText(null);
     	if(listaCorsi.isEmpty()) {
@@ -99,13 +92,10 @@ public class FXMLController {
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
-    	this.txtMatricola.clear();
-    	this.txtCognome.clear();
-    	this.txtNome.clear();
+
     	this.txtRisultato.clear();
-    	
-    	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().equals("--Nessun corso--")) {
-    		this.labelErroriCorsi.setText("ERRORE: nessun corso selezionato");
+    	this.labelErrore.setText(null);
+    	if(!this.checkSelezioneCorsi()) {
     		return;
     	}
     	
@@ -124,20 +114,26 @@ public class FXMLController {
 
     @FXML
     void doIscrizione(ActionEvent event) {
-
+    	txtRisultato.clear();
+    	this.labelErrore.setText(null);
+    	this.labelErroriCorsi.setText(null);
+    	boolean checkMatricola=this.isValid(txtMatricola.getText());
+    	boolean checkCorsi=this.checkSelezioneCorsi();
+    	if((!checkMatricola)||(!checkCorsi)) {
+    		return;
+    	}
+    	int matricola=Integer.parseInt(txtMatricola.getText());
+    	if(model.iscriviStudenteACorso(matricola, this.choiceCorsi.getValue())) {
+    		this.txtRisultato.setText("Iscrizione avvenuta con successo");
+    	}else {
+    		this.txtRisultato.setText("Studente già iscritto al corso");
+    	}
     }
 
     @FXML
     void getNomeCognome(ActionEvent event) {
-
-    	
-    	if(txtMatricola.getText().isBlank()) {
-    		return;
-    	}
-    	this.choiceCorsi.setValue(null);
-    	
+    	this.labelErroriCorsi.setText(null);
     	if(!this.isValid(txtMatricola.getText())) {
-    		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
     		return;
     	}
     	int matricola=Integer.parseInt(txtMatricola.getText());
@@ -148,7 +144,6 @@ public class FXMLController {
     		labelErrore.setText(null);
     		return;
     	}
-    	labelErrore.setText("Nessuno studente trovato");
     }
 
     @FXML
@@ -186,12 +181,31 @@ public class FXMLController {
     }
     
     public boolean isValid(String matricola) {
-    	if(matricola.length()!=6) {
+    	if(txtMatricola.getText().isBlank()) {
+    		this.labelErrore.setText("ERRORE: inserire matricola");
     		return false;
     	}
+    	if(matricola.length()!=6) {
+    		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
+    		return false;
+    	}
+    	int matricolaInt;
     	try {
-    		Integer.parseInt(matricola);
+    		matricolaInt=Integer.parseInt(matricola);
     	}catch(NumberFormatException nfe) {
+    		this.labelErrore.setText("ERRORE: matricola nel formato sbagliato");
+    		return false;
+    	}
+    	if(model.getStudente(matricolaInt)==null) {
+    		this.labelErrore.setText("ERRORE:studente non presente nel database");
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public boolean checkSelezioneCorsi() {
+    	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().equals("--Nessun corso--")) {
+    		this.labelErroriCorsi.setText("ERRORE: nessun corso selezionato");
     		return false;
     	}
     	return true;
