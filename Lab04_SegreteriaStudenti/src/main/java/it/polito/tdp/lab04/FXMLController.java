@@ -5,6 +5,7 @@
 package it.polito.tdp.lab04;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.Model;
@@ -55,13 +56,16 @@ public class FXMLController {
     private Button bttnIscrizione;
 
     @FXML
-    private TextArea txtRislutato;
+    private TextArea txtRisultato;
 
     @FXML
     private Button bttnReset;
     
     @FXML
     private Label labelErrore;
+    
+    @FXML
+    private Label labelErroriCorsi;
 
     @FXML
     void doCercaCorsi(ActionEvent event) {
@@ -70,7 +74,23 @@ public class FXMLController {
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
-
+    	this.txtRisultato.clear();;
+    	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().equals("--Nessun corso--")) {
+    		this.labelErroriCorsi.setText("ERRORE: nessun corso selezionato");
+    		return;
+    	}
+    	
+    	List<Studente> studentiCorso=model.getStudentiIscrittiAlCorso(choiceCorsi.getValue());
+    	this.labelErroriCorsi.setText(null);
+    	if(studentiCorso.isEmpty()) {
+    		txtRisultato.setText("Nessuno studente iscritto al corso");
+    		return;
+    	}
+    	for(Studente s:studentiCorso) {
+    		this.txtRisultato.appendText(s.toString()+"\n");
+    	}
+    	
+    	
     }
 
     @FXML
@@ -96,7 +116,7 @@ public class FXMLController {
     		labelErrore.setText(null);
     		return;
     	}
-    	labelErrore.setText("Nessuno studente trovato con matricola scritta");
+    	labelErrore.setText("Nessuno studente trovato");
     }
 
     @FXML
@@ -114,9 +134,10 @@ public class FXMLController {
         assert txtCognome != null : "fx:id=\"txtCognome\" was not injected: check your FXML file 'Scene.fxml'.";
         assert bttnCercaCorsi != null : "fx:id=\"bttnCercaCorsi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert bttnIscrizione != null : "fx:id=\"bttnIscrizione\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert txtRislutato != null : "fx:id=\"txtRislutato\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert txtRisultato != null : "fx:id=\"txtRislutato\" was not injected: check your FXML file 'Scene.fxml'.";
         assert bttnReset != null : "fx:id=\"bttnReset\" was not injected: check your FXML file 'Scene.fxml'.";
         assert labelErrore != null : "fx:id=\"labelErrore\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert labelErroriCorsi != null : "fx:id=\"labelErroriCorsi\" was not injected: check your FXML file 'Scene.fxml'.";
         ObservableList<String> corsi =FXCollections.observableArrayList(model.getTuttiICorsi());
         this.choiceCorsi.setItems(corsi);
         this.choiceCorsi.getItems().add(0,"--Nessun corso--");

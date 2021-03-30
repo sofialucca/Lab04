@@ -34,11 +34,23 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <Button fx:id="bttnIscrittiCorso" mnemonicParsing="false" onAction="#doCercaIscritti" prefHeight="25.0" prefWidth="124.0" text="Cerca iscritti corso">
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Button fx:id="bttnIscrittiCorso" mnemonicParsing="false" onAction="#doCercaIscritti" prefHeight="25.0" prefWidth="124.0" text="Cerca iscritti corso">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Label fx:id="labelErroriCorsi" textFill="RED">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
-            </Button>
+            </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
                   <Label text="Studente:">
@@ -89,7 +101,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <TextArea fx:id="txtRislutato" editable="false" prefHeight="200.0" prefWidth="200.0">
+            <TextArea fx:id="txtRisultato" editable="false" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>

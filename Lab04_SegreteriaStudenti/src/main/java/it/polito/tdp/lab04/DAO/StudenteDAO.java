@@ -18,12 +18,18 @@ public class StudenteDAO {
 			st.setInt(1, matricola);
 			ResultSet rs=st.executeQuery();
 			
+			Studente studenteCercato=null;
 			if(rs.next()) {
-				return new Studente(rs.getInt("matricola"),rs.getString("cognome"),rs.getString("nome"),rs.getString("CDS"));
+				studenteCercato= new Studente(rs.getInt("matricola"),rs.getString("cognome"),rs.getString("nome"),rs.getString("CDS"));
 			}
-			return null;
+			
+			rs.close();
+			st.close();
+			conn.close();
+			
+			return studenteCercato;
 		}catch(SQLException sqle) {
-			throw new RuntimeException(sqle);
+			throw new RuntimeException("Errore DB",sqle);
 		}
 		
 		

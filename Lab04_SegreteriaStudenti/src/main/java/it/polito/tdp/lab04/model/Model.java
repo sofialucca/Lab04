@@ -19,7 +19,7 @@ public class Model {
 	public List<String> getTuttiICorsi(){
 		List<String> nomiCorsi=new ArrayList<>();
 		for(Corso c:corsoDao.getTuttiICorsi()) {
-			nomiCorsi.add(c.getNome());
+			nomiCorsi.add(c.getCodins()+" - "+c.getNome());
 		}
 		return nomiCorsi;
 	}
@@ -28,5 +28,8 @@ public class Model {
 		return studenteDao.getStudente(matricola);
 	}
 	
-	
+	public List<Studente> getStudentiIscrittiAlCorso(String corso){
+		String codins=corso.substring(0,7);
+		return corsoDao.getStudentiIscrittiAlCorso(codins);
+	}
 }

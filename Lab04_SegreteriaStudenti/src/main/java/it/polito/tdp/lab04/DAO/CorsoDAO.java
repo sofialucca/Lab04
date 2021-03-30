@@ -54,15 +54,63 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public void getCorso(Corso corso) {
-		// TODO
+	public Corso getCorso(String codins) {
+		
+		String sql="SELECT * "
+				+"FROM corso "
+				+"WHERE codins=?";
+		
+		Corso corso=null;
+		
+		try {
+			Connection conn=ConnectDB.getConnection();
+			PreparedStatement st=conn.prepareStatement(sql);
+			
+			st.setString(1, codins);
+			ResultSet rs=st.executeQuery();
+			
+			if(rs.next()) {
+				corso=new Corso(rs.getString("codins"),rs.getInt("crediti"),rs.getString("nome"),rs.getInt("pd"));
+			}
+			
+			rs.close();
+			st.close();
+			conn.close();
+			return corso;
+			
+		}catch(SQLException sqle) {
+			throw new RuntimeException("Errore nel DB",sqle);
+		}
 	}
 
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(String corso) {
+		String sql="SELECT i.matricola, s.cognome, s.nome, s.CDS "
+				+"FROM iscrizione AS i,corso AS c,studente AS s "
+				+"WHERE i.codins=c.codins AND c.codins=? AND s.matricola=i.matricola "
+				+"ORDER BY i.matricola ASC";
+		
+		List<Studente> listaStudenti=new LinkedList<>();
+		try {
+			Connection conn=ConnectDB.getConnection();
+			PreparedStatement st=conn.prepareStatement(sql);
+			
+			st.setString(1, corso);
+			ResultSet rs=st.executeQuery();
+			
+			while(rs.next()) {
+				listaStudenti.add(new Studente(rs.getInt("i.matricola"),rs.getString("s.cognome"),rs.getString("s.nome"),rs.getString("s.CDS")));
+			}
+			
+			rs.close();
+			st.close();
+			conn.close();
+			return listaStudenti;
+		}catch(SQLException sqle) {
+			throw new RuntimeException("Errore DB",sqle);
+		}
 	}
 
 	/*
