@@ -54,29 +54,29 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public Corso getCorso(String codins) {
+	public Corso getCorso(Corso corso) {
 		
 		String sql="SELECT * "
 				+"FROM corso "
 				+"WHERE codins=?";
 		
-		Corso corso=null;
+		Corso corsoTrovato=null;
 		
 		try {
 			Connection conn=ConnectDB.getConnection();
 			PreparedStatement st=conn.prepareStatement(sql);
 			
-			st.setString(1, codins);
+			st.setString(1, corso.getCodins());
 			ResultSet rs=st.executeQuery();
 			
 			if(rs.next()) {
-				corso=new Corso(rs.getString("codins"),rs.getInt("crediti"),rs.getString("nome"),rs.getInt("pd"));
+				corsoTrovato=new Corso(rs.getString("codins"),rs.getInt("crediti"),rs.getString("nome"),rs.getInt("pd"));
 			}
 			
 			rs.close();
 			st.close();
 			conn.close();
-			return corso;
+			return corsoTrovato;
 			
 		}catch(SQLException sqle) {
 			throw new RuntimeException("Errore nel DB",sqle);
@@ -86,18 +86,18 @@ public class CorsoDAO {
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public List<Studente> getStudentiIscrittiAlCorso(String corso) {
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
 		String sql="SELECT i.matricola, s.cognome, s.nome, s.CDS "
-				+"FROM iscrizione AS i,corso AS c,studente AS s "
-				+"WHERE i.codins=c.codins AND c.codins=? AND s.matricola=i.matricola "
-				+"ORDER BY i.matricola ASC";
+				+"FROM iscrizione AS i,studente AS s "
+				+"WHERE i.codins=? AND s.matricola=i.matricola "
+				+"ORDER BY s.cognome ASC";
 		
 		List<Studente> listaStudenti=new LinkedList<>();
 		try {
 			Connection conn=ConnectDB.getConnection();
 			PreparedStatement st=conn.prepareStatement(sql);
 			
-			st.setString(1, corso);
+			st.setString(1, corso.getCodins());
 			ResultSet rs=st.executeQuery();
 			
 			while(rs.next()) {
@@ -116,7 +116,7 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(int matricola, String codins) {
+	public boolean inscriviStudenteACorso(int matricola, Corso corso) {
 		
 		String sql1="SELECT * "+
 				"FROM iscrizione "+
@@ -129,7 +129,7 @@ public class CorsoDAO {
 			PreparedStatement st=conn.prepareStatement(sql1);
 			
 			st.setInt(1, matricola);
-			st.setString(2, codins);
+			st.setString(2, corso.getCodins());
 			
 			ResultSet rs=st.executeQuery();
 			
@@ -143,7 +143,7 @@ public class CorsoDAO {
 			
 			st=conn.prepareStatement(sql2);
 			st.setInt(1, matricola);
-			st.setString(2, codins);
+			st.setString(2, corso.getCodins());
 			st.executeUpdate();
 			
 			st.close();

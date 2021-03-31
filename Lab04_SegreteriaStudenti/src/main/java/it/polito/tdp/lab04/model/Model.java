@@ -16,21 +16,16 @@ public class Model {
 		studenteDao=new StudenteDAO();
 	}
 	
-	public List<String> getTuttiICorsi(){
-		List<String> nomiCorsi=new ArrayList<>();
-		for(Corso c:corsoDao.getTuttiICorsi()) {
-			nomiCorsi.add(c.getCodins()+" - "+c.getNome());
-		}
-		return nomiCorsi;
+	public List<Corso> getTuttiICorsi(){
+		return corsoDao.getTuttiICorsi();
 	}
 	
 	public Studente getStudente(int matricola) {
 		return studenteDao.getStudente(matricola);
 	}
 	
-	public List<Studente> getStudentiIscrittiAlCorso(String corso){
-		String codins=corso.substring(0,7);
-		return corsoDao.getStudentiIscrittiAlCorso(codins);
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso){
+		return corsoDao.getStudentiIscrittiAlCorso(corso);
 	}
 	
 	public List<Corso> getCorsiStudente(int matricola){
@@ -38,8 +33,7 @@ public class Model {
 		return studenteDao.getCorsiStudente(matricola);
 	}
 	
-	public boolean iscriviStudenteACorso(int matricola,String corso) {
-		String codins=corso.substring(0,7);
-		return corsoDao.inscriviStudenteACorso(matricola, codins);
+	public boolean iscriviStudenteACorso(int matricola,Corso corso) {
+		return corsoDao.inscriviStudenteACorso(matricola, corso);
 	}
 }

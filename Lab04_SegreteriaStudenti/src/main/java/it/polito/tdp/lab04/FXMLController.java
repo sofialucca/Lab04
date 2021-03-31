@@ -32,7 +32,7 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ComboBox<String> choiceCorsi;
+    private ComboBox<Corso> choiceCorsi;
 
     @FXML
     private Button bttnIscrittiCorso;
@@ -85,9 +85,12 @@ public class FXMLController {
     		return;
     	}
     	
+    	StringBuilder sb=new StringBuilder();
     	for(Corso c:listaCorsi) {
-    		this.txtRisultato.appendText(c.toString()+"\n");
+    		sb.append(String.format("%-8s %-3d %-50s %-1d\n", c.getCodins(),c.getCrediti(),c.getNome(),c.getPd()));
     	}
+    	txtRisultato.appendText(sb.toString());
+    	
     }
 
     @FXML
@@ -105,11 +108,12 @@ public class FXMLController {
     		txtRisultato.setText("ERRORE:studente non presente nel database");
     		return;
     	}
+    	
+    	StringBuilder sb=new StringBuilder();
     	for(Studente s:studentiCorso) {
-    		this.txtRisultato.appendText(s.toString()+"\n");
+    		sb.append(String.format("%-8d %-25s %-25s %-4s\n", s.getMatricola(), s.getCognome(), s.getNome(), s.getCDS()));
     	}
-    	
-    	
+    	txtRisultato.appendText(sb.toString());
     }
 
     @FXML
@@ -171,9 +175,10 @@ public class FXMLController {
         assert bttnReset != null : "fx:id=\"bttnReset\" was not injected: check your FXML file 'Scene.fxml'.";
         assert labelErrore != null : "fx:id=\"labelErrore\" was not injected: check your FXML file 'Scene.fxml'.";
         assert labelErroriCorsi != null : "fx:id=\"labelErroriCorsi\" was not injected: check your FXML file 'Scene.fxml'.";
-        ObservableList<String> corsi =FXCollections.observableArrayList(model.getTuttiICorsi());
+        ObservableList<Corso> corsi =FXCollections.observableArrayList(model.getTuttiICorsi());
         this.choiceCorsi.setItems(corsi);
-        this.choiceCorsi.getItems().add(0,"--Nessun corso--");
+        this.choiceCorsi.getItems().add(0,new Corso("---Nessun corso---",null,"",null));
+        txtRisultato.setStyle("-fx-font-family: monospace");
     }
     
     public void setModel(Model model) {
@@ -204,7 +209,7 @@ public class FXMLController {
     }
     
     public boolean checkSelezioneCorsi() {
-    	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().equals("--Nessun corso--")) {
+    	if(choiceCorsi.getValue()==null||choiceCorsi.getValue().getNome().equals("--Nessun corso--")) {
     		this.labelErroriCorsi.setText("ERRORE: nessun corso selezionato");
     		return false;
     	}
